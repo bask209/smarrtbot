@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling==1.33.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smarrtbot"
+version = "0.0.1"
+description = "Telegram bot that turns EN/ES chat into Radarr and Sonarr actions via Gemini function calling, with hardlink-aware storage cleanup."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "smarrtbot contributors" }]
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+]
+# Direct dependencies are pinned exactly; a hashed lock file is added with the image (M7).
+dependencies = [
+  "python-telegram-bot[job-queue]==22.8",
+  "httpx==0.28.1",
+  "pydantic==2.14.2",
+  "pydantic-settings==2.16.2",
+  "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.2.0",
+  "pytest-asyncio==1.4.1.post1",
+  "respx==0.23.1",
+  "ruff==0.17.3",
+  "pip-audit==2.10.1",
+]
+
+[project.scripts]
+smarrtbot = "smarrtbot.cli:main"
+
+[project.urls]
+Source = "https://github.com/bask209/smarrtbot"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/smarrtbot"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q"

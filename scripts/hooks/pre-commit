@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+# Blocks commits that contain secrets, private IPs or personal paths.
+# Enable once per clone:   git config core.hooksPath scripts/hooks
+# (or use the pre-commit framework with .pre-commit-config.yaml)
+set -eu
+GITLEAKS="${GITLEAKS:-$(command -v gitleaks || true)}"
+if [ -z "$GITLEAKS" ]; then
+  echo "pre-commit: gitleaks not found (install it or set GITLEAKS=/path/to/gitleaks)" >&2
+  exit 1
+fi
+for cfg in .gitleaks.toml .gitleaks-hygiene.toml; do
+  "$GITLEAKS" git --pre-commit --staged --redact --no-banner --config "$cfg"
+done

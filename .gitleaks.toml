@@ -1,0 +1,28 @@
+title = "smarrtbot gitleaks config"
+
+# Keep all built-in rules (tokens, API keys, private keys, ...).
+[extend]
+useDefault = true
+
+[[rules]]
+id = "telegram-bot-token"
+description = "Telegram bot token"
+regex = '''\b\d{8,10}:[A-Za-z0-9_-]{35}\b'''
+keywords = [":"]
+
+[[rules]]
+id = "google-api-key"
+description = "Google / Gemini API key"
+regex = '''\bAIza[0-9A-Za-z_-]{35}\b'''
+keywords = ["AIza"]
+
+[[rules]]
+id = "arr-api-key"
+description = "32-hex *arr / Plex style API key assigned to a key-like name"
+regex = '''(?i)(?:api[_-]?key|x-api-key|plex[_-]?token|x-plex-token)["']?\s*[:=]\s*["']?[0-9a-z]{20,}'''
+keywords = ["api", "plex"]
+
+[allowlist]
+description = "Placeholders and the rule definitions themselves"
+paths = ['''\.gitleaks(-hygiene)?\.toml$''']
+regexes = ['''(?i)(changeme|placeholder|example|xxxx+|<[a-z_]+>)''']

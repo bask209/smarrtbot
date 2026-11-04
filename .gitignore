@@ -1,0 +1,41 @@
+# --- Secrets: never commit ---
+secrets/
+*.secret
+*.key
+*.pem
+*.token
+.env
+.env.*
+!.env.example
+config.yaml
+config.local.yaml
+gemini_keys*
+!examples/**
+
+# --- Runtime data ---
+data/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+*.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Tools / editors ---
+.codegraph/
+.idea/
+.vscode/
+*.swp
+.DS_Store
