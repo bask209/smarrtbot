@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "smarrtbot"
-version = "0.0.1"
+version = "0.1.0"
 description = "Telegram bot that turns EN/ES chat into Radarr and Sonarr actions via Gemini function calling, with hardlink-aware storage cleanup."
 readme = "README.md"
 license = "MIT"
@@ -50,11 +50,15 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
+# Bilingual UI strings use typographic quotes and dashes on purpose.
+ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101"]
+"tests/**" = ["S101", "S105", "S106", "S108", "E501", "ASYNC240", "B018", "RUF059"]
+"src/smarrtbot/bot/i18n.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 addopts = "-q"

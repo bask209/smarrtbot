@@ -1,0 +1,69 @@
+# smarrtbot configuration example. Copy to <smarrtbot-dir>/config/config.yaml.
+# Every value here is a placeholder. Secrets are NEVER put in this file: only the paths of the
+# mounted secret files. Any key can be overridden by an env var, e.g. SMARRTBOT_DRY_RUN=false or
+# SMARRTBOT_TELEGRAM__OWNER_ID=123. Full reference: docs/CONFIG.md
+
+dry_run: true                # keep true until the private-chat soak test is done
+log_level: INFO
+data_dir: /data/state        # SQLite DB + scan cache (bind-mount to the HDD)
+health_port: 8080
+
+telegram:
+  token_file: /run/secrets/telegram_token
+  owner_id: 0                # your numeric Telegram user id (send /whoami to the bot)
+  allowed_group_ids: []      # e.g. [-1001234567890]; leave empty until the DM test passes
+  notify_chat_id: null       # where TV-check flags and alerts go (default: first group)
+
+radarr:
+  url: http://host.docker.internal:7878
+  api_key_file: /run/secrets/radarr_api_key
+  quality_profile: null      # null: "smarrtbot 1080p" if setup-arr created it, else HD-1080p
+  root_folder: null          # null: first root folder in Radarr
+
+sonarr:
+  url: http://host.docker.internal:8989
+  api_key_file: /run/secrets/sonarr_api_key
+  quality_profile: null
+  root_folder: null
+
+qbittorrent:
+  url: http://host.docker.internal:8085
+  username: admin
+  password_file: /run/secrets/qbittorrent_password
+
+mediaserver:
+  kind: plex                 # plex | none
+  url: http://host.docker.internal:32400
+  token_file: /run/secrets/plex_token
+
+gemini:
+  keys_file: /run/secrets/gemini_keys   # one key per line; edit the file to add a key
+  pinned_model: null                     # e.g. gemini-2.5-flash to override the ranking
+  max_consecutive_failures: 5
+
+limits:
+  deletes_per_hour: 5
+  owner_exempt_from_rate_limit: true
+  daily_delete_cap_gb: 500
+  pending_ttl_seconds: 300
+
+storage:
+  # Container paths. Mount the media folder read-only and the torrents folder read-write at
+  # exactly these paths, which are also what Radarr/Sonarr/qBittorrent report.
+  movies_root: /data/media/movies
+  tv_root: /data/media/tv
+  torrents_root: /data/torrents
+  writable_roots: [/data/torrents]
+  path_maps: []              # only needed if your services see different paths than the bot
+  #  - {src: /downloads, dst: /data/torrents}
+  alert_free_percent: 10
+  alert_free_gb: 100
+  weekly_summary: false
+  scan_interval_hours: 24
+  orphan_min_age_minutes: 120
+
+tvcheck:
+  enabled: true
+  interval_minutes: 5
+  max_bitrate_mbps_4k: 25     # placeholder until tested with a real problem file
+  max_bitrate_mbps_1080p: 12

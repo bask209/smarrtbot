@@ -136,7 +136,7 @@ Opt-in, and only after one file has been tested with the owner's approval. A low
 
 ## 6. Data (SQLite, WAL mode, stdlib `sqlite3` behind a thin repository layer)
 
-Tables: `users`, `chats`, `turns`, `summaries`, `pending_actions`, `audit_log`, `keys_usage`, `model_state`, `history_cursor`, `flags`, `storage_snapshots`.
+Tables: `users`, `chats`, `turns`, `summaries`, `pending_actions`, `audit_log`, `keys_usage`, `model_state`, `history_cursor`, `flags` (TV-check queue and results), `storage_snapshots`, plus a small `kv` table (alert state, cleanup-candidate cache, access-request throttling).
 
 ## 7. Configuration
 
@@ -149,10 +149,11 @@ Tables: `users`, `chats`, `turns`, `summaries`, `pending_actions`, `audit_log`, 
 
 ```
 src/smarrtbot/
-  config.py  db.py  setup_arr.py  health.py  cli.py
+  config.py  db.py  setup_arr.py  setup_notify.py  health.py  cli.py
+  services.py  fsguard.py  scan.py  logsafe.py  util.py
   bot/          handlers, auth, i18n (en, es)
   llm/          gemini, keypool, modelmanager, tools, memory
-  clients/      radarr, sonarr, qbit
+  clients/      http (retry/backoff), arr (Radarr + Sonarr), qbit
   mediaserver/  base, plex (jellyfin later)
   flows/        add, delete, tvcheck, storage, cleanup
 tests/  docs/  examples/  .github/workflows/  Dockerfile

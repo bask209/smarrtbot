@@ -1,0 +1,43 @@
+# Portainer / docker compose stack for smarrtbot. Replace every <PLACEHOLDER>.
+# The image tag is pinned to a release; never use :latest.
+services:
+  smarrtbot:
+    image: ghcr.io/bask209/smarrtbot:0.1.0
+    container_name: smarrtbot
+    restart: unless-stopped
+    user: "1000:1000"
+    mem_limit: 256m
+    cpus: 0.5
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      TZ: <TIMEZONE>                     # e.g. America/Mexico_City
+    extra_hosts:
+      # Reach Radarr/Sonarr/qBittorrent/Plex on the host's published ports without
+      # putting the host address in config. Not in the VPN namespace on purpose.
+      - host.docker.internal:host-gateway
+    ports:
+      - "<HEALTH_PORT>:8080"             # health endpoint for the dashboard; optional
+    volumes:
+      - <SMARRTBOT_DIR>/config:/config:ro
+      - <SMARRTBOT_DIR>/secrets:/run/secrets:ro
+      - <SMARRTBOT_DIR>/state:/data/state
+      # Only the media and torrents folders, never their parent. Media is read-only.
+      - <DATA_DIR>/media:/data/media:ro
+      - <DATA_DIR>/torrents:/data/torrents
+    healthcheck:
+      test: ["CMD", "smarrtbot", "healthcheck"]
+      interval: 60s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
