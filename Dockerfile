@@ -24,6 +24,10 @@ ENV PATH=/venv/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     SMARRTBOT_CONFIG=/config/config.yaml \
     SMARRTBOT_DATA_DIR=/data/state
+# Pick up Debian security fixes released after the pinned base digest (Trivy gates the release).
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade \
+ && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
 RUN groupadd --gid 1000 app && useradd --uid 1000 --gid 1000 --no-create-home --shell /usr/sbin/nologin app \
  && mkdir -p /data/state /config && chown 1000:1000 /data/state
 COPY --from=build /venv /venv

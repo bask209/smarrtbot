@@ -2,7 +2,7 @@
 # The image tag is pinned to a release; never use :latest.
 services:
   smarrtbot:
-    image: ghcr.io/bask209/smarrtbot:0.1.0
+    image: ghcr.io/bask209/smarrtbot:0.1.1
     container_name: smarrtbot
     restart: unless-stopped
     user: "1000:1000"

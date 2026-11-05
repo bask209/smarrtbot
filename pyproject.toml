@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "smarrtbot"
-version = "0.1.0"
+version = "0.1.1"
 description = "Telegram bot that turns EN/ES chat into Radarr and Sonarr actions via Gemini function calling, with hardlink-aware storage cleanup."
 readme = "README.md"
 license = "MIT"
