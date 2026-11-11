@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Built by GitHub Actions (see .github/workflows/release.yml), not on the deployment host.
 
-FROM python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 AS build
+FROM python:3.15-slim@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /src
 COPY requirements.lock requirements-build.lock ./
@@ -13,7 +13,7 @@ COPY src ./src
 RUN /buildenv/bin/pip wheel --no-deps --no-build-isolation -w /wheels . \
  && /venv/bin/pip install --no-deps /wheels/*.whl
 
-FROM python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+FROM python:3.15-slim@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928
 ARG VERSION=dev
 LABEL org.opencontainers.image.source="https://github.com/bask209/smarrtbot" \
       org.opencontainers.image.description="Telegram bot: chat to Radarr/Sonarr via Gemini, hardlink-aware storage cleanup" \
