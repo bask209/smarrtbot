@@ -20,7 +20,7 @@ classifiers = [
 dependencies = [
   "python-telegram-bot[job-queue]==22.8",
   "httpx==0.28.1",
-  "pydantic==2.14.2",
+  "pydantic==2.14.3",
   "pydantic-settings==2.16.2",
   "PyYAML==6.0.3",
 ]
